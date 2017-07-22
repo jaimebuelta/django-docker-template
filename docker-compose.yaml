@@ -1,10 +1,11 @@
 version: '3'
 
 services:
+    # Development related
     db:
         build:
             context: .
-            dockerfile: ./docker/Dockerfile-postgres
+            dockerfile: ./docker/db/Dockerfile-postgres
     debug-server:
         build: .
         command: ./start_debug_server.sh
@@ -21,4 +22,11 @@ services:
             - ./src:/opt/code
         depends_on:
             - db
-       
+    # Producion related
+    service:
+        build: .
+        command: /opt/service/start_service.sh
+        ports:
+            - "8080:80"
+        depends_on:
+            - db

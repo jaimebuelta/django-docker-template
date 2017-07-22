@@ -27,9 +27,8 @@ Tree structure
 ├── Dockerfile (General Dockerfile of the main service)
 ├── requirements.txt (python requirements)
 ├── docker (Files related to build and operation of containers)
-|   ├── ...
-│   └── (docker subdirs, like db)
-│      └── Scripts related to docker creation and operation of db service
+│   └── (docker subdirs, like db or service)
+│      └── Scripts related to docker creation and operation of that service
 └── src (the Django project files)
     ├── manage.py
     ├── pytest.ini
@@ -79,3 +78,23 @@ in the DB do, like new fixtures or a new migration. Build all services with
 ```
     docker-compose build
 ```
+
+Docker services oriented to production
+=========
+
+At the moment, the main docker-composer runs the main container with a developer configuration
+
+- service: Starts an http server serving the application. The application is server through
+           uwsgi and nginx, and static files are cached through nginx.
+           The service is available in http://localhost:8080/ when called through docker-compose.
+           Please note that the container opens port 80.
+  Once build, it can be used directly from the built container, though it need to connect to a valid db. A simple test can be done in
+
+```
+    # Start the container djangodocker_service routing its port 80 to locahost:8080
+    docker run -it --name test -p 8080:80 djangodocker_service
+```
+  The command option `-it` allows to stop the container hitting CTRL+C, as it connects to it, instead of having to use `docker stop test`. See [Docker documentation](https://docs.docker.com/engine/reference/commandline/run/#examples) for more details.
+
+  The container will be configurable using environment variables.
+  Also note that any changes to the contaniner won't be in effect until is rebuild.
