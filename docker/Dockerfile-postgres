@@ -25,7 +25,14 @@ RUN mkdir -p /opt/data
 ENV PGDATA /opt/data
 WORKDIR /opt/code
 
+RUN mkdir -p /opt/code/db
+WORKDIR /opt/code/db
+# Add postgres setup
+ADD ./docker/db/postgres-setup.sh /opt/code/db/
+RUN ./postgres-setup.sh
+
 # Install our code to run migrations and prepare DB
+WORKDIR /opt/code
 ADD requirements.txt /opt/code
 
 # Some Docker-fu. In one step install the compile packages, install the
@@ -48,19 +55,12 @@ RUN apk add --no-cache --virtual .build-deps \
     && apk add --virtual .rundeps $runDeps \
     && apk del .build-deps
 
-RUN mkdir -p /opt/code/db
-WORKDIR /opt/code/db
-# Add all DB commands
-ADD ./docker/db/* /opt/code/db/
-ADD ./docker/prepare_django_db.sh /opt/code/
-
-RUN ./postgres-setup.sh
-
 # Need to import all the code, due tangled dependencies
 ADD ./src/ /opt/code/
+# Add all DB commanda
+ADD ./docker/db/* /opt/code/db/
 
-WORKDIR /opt/code/
 # get migrations, etc, ready
-RUN ./prepare_django_db.sh
+RUN /opt/code/db/prepare_django_db.sh
 
 CMD ["su-exec",  "postgres", "postgres"]

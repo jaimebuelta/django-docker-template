@@ -16,7 +16,7 @@ services:
             - db
     test:
         build: .
-        command: pytest
+        entrypoint: pytest
         volumes:
             - ./src:/opt/code
         depends_on:
