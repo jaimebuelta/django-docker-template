@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+    db:
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile-postgres
+    debug-server:
+        build: .
+        command: ./start_debug_server.sh
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./src:/opt/code
+        depends_on:
+            - db
+    test:
+        build: .
+        command: pytest
+        volumes:
+            - ./src:/opt/code
+        depends_on:
+            - db
+       

@@ -1,0 +1,66 @@
+# FROM rlesouef/alpine-postgres
+FROM alpine:3.5
+
+RUN apk --update add \
+    bash nano curl su-exec\
+    python3 \
+    postgresql postgresql-contrib postgresql-dev && \
+    rm -rf /var/cache/apk/*
+
+ENV LANG en_US.utf8
+ENV PGDATA /var/lib/postgresql/data
+
+
+# ENTRYPOINT ["/postgres-entrypoint.sh"]
+
+EXPOSE 5432
+VOLUME /var/lib/postgresql/data
+
+
+# Adding our code
+RUN mkdir -p /opt/code
+RUN mkdir -p /opt/data
+# Store the data inside the container, as we don't care for
+# persistence
+ENV PGDATA /opt/data
+WORKDIR /opt/code
+
+# Install our code to run migrations and prepare DB
+ADD requirements.txt /opt/code
+
+# Some Docker-fu. In one step install the compile packages, install the
+# dependencies and then remove them. That skims the image size quite
+# sensibly.
+RUN apk add --no-cache --virtual .build-deps \
+  python3-dev build-base linux-headers gcc \
+    && pip3 install -r requirements.txt \
+    && find /usr/local \
+        \( -type d -a -name test -o -name tests \) \
+        -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
+        -exec rm -rf '{}' + \
+    && runDeps="$( \
+        scanelf --needed --nobanner --recursive /usr/local \
+                | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
+                | sort -u \
+                | xargs -r apk info --installed \
+                | sort -u \
+    )" \
+    && apk add --virtual .rundeps $runDeps \
+    && apk del .build-deps
+
+RUN mkdir -p /opt/code/db
+WORKDIR /opt/code/db
+# Add all DB commands
+ADD ./docker/db/* /opt/code/db/
+ADD ./docker/prepare_django_db.sh /opt/code/
+
+RUN ./postgres-setup.sh
+
+# Need to import all the code, due tangled dependencies
+ADD ./src/ /opt/code/
+
+WORKDIR /opt/code/
+# get migrations, etc, ready
+RUN ./prepare_django_db.sh
+
+CMD ["su-exec",  "postgres", "postgres"]

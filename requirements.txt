@@ -1,0 +1,4 @@
+Django==1.11
+pytest-django
+psycopg2
+djangorestframework
