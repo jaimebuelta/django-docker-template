@@ -11,5 +11,5 @@ cmd="$@"
 
 until PGPASSWORD=$PGPASSWORD su-exec postgres psql -c '\l'; do
   >&2 echo "Postgres is unavailable - sleeping"
-  sleep 3
+  sleep 1
 done

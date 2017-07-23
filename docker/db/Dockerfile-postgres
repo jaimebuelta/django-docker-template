@@ -1,5 +1,5 @@
 # FROM rlesouef/alpine-postgres
-FROM alpine:3.5
+FROM alpine:3.6
 
 RUN apk --update add \
     bash nano curl su-exec\

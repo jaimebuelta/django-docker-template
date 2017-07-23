@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.6
 
 # Add requirements for python and pip
 RUN apk add --update python3 pytest
