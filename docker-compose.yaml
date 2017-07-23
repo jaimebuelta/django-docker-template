@@ -6,11 +6,11 @@ services:
         build:
             context: .
             dockerfile: ./docker/db/Dockerfile-postgres
-    debug-server:
+    dev-server:
         build: .
-        command: ./start_debug_server.sh
+        command: ./start_dev_server.sh
         ports:
-            - "8000:8000"
+            - "8000:80"
         volumes:
             - ./src:/opt/code
         depends_on:
@@ -23,9 +23,9 @@ services:
         depends_on:
             - db
     # Producion related
-    service:
+    server:
         build: .
-        command: /opt/service/start_service.sh
+        command: /opt/server/start_server.sh
         ports:
             - "8080:80"
         depends_on:

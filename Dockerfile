@@ -1,8 +1,9 @@
-FROM alpine:3.6
+FROM alpine:3.5
 
 # Add requirements for python and pip
 RUN apk add --update python3 pytest
 RUN apk add --update postgresql-dev 
+RUN apk add --update curl
 
 RUN mkdir -p /opt/code
 WORKDIR /opt/code
@@ -34,13 +35,13 @@ RUN apk add --no-cache --virtual .build-deps \
 
 
 # Add uwsgi and nginx configuration
-RUN mkdir -p /opt/service
+RUN mkdir -p /opt/server
 RUN mkdir -p /opt/static
 RUN apk add --update nginx
 RUN mkdir -p /run/nginx
-ADD ./docker/service/uwsgi.ini /opt/service
-ADD ./docker/service/nginx.conf /etc/nginx/conf.d/default.conf
-ADD ./docker/service/start_service.sh /opt/service
+ADD ./docker/server/uwsgi.ini /opt/server
+ADD ./docker/server/nginx.conf /etc/nginx/conf.d/default.conf
+ADD ./docker/server/start_server.sh /opt/server
 
 # Add code
 ADD ./src/ /opt/code/
@@ -49,4 +50,5 @@ ADD ./src/ /opt/code/
 RUN python3 manage.py collectstatic
 
 EXPOSE 80
-CMD ["/bin/sh", "/opt/service/start_service.sh"]
+CMD ["/bin/sh", "/opt/server/start_server.sh"]
+HEALTHCHECK CMD curl --fail http://localhost/smoketests/

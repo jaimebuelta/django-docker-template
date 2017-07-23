@@ -24,10 +24,10 @@ Tree structure
 ```
 ├── README.md (this file)
 ├── docker-compose.yaml (general dockerfile description, aimed at development)
-├── Dockerfile (General Dockerfile of the main service)
+├── Dockerfile (General Dockerfile of the main server)
 ├── requirements.txt (python requirements)
 ├── docker (Files related to build and operation of containers)
-│   └── (docker subdirs, like db or service)
+│   └── (docker subdirs, like db or server)
 │      └── Scripts related to docker creation and operation of that service
 └── src (the Django project files)
     ├── manage.py
@@ -84,15 +84,15 @@ Docker services oriented to production
 
 At the moment, the main docker-composer runs the main container with a developer configuration
 
-- service: Starts an http server serving the application. The application is server through
-           uwsgi and nginx, and static files are cached through nginx.
-           The service is available in http://localhost:8080/ when called through docker-compose.
-           Please note that the container opens port 80.
+- server: Starts an http server serving the application. The application is served through
+          uwsgi and nginx, and static files are cached through nginx.
+          The service is available in http://localhost:8080/ when called through docker-compose.
+          Please note that the container opens port 80.
   Once build, it can be used directly from the built container, though it need to connect to a valid db. A simple test can be done in
 
 ```
-    # Start the container djangodocker_service routing its port 80 to locahost:8080
-    docker run -it --name test -p 8080:80 djangodocker_service
+    # Start the container djangodocker_server routing its port 80 to locahost:8080
+    docker run -it --name test -p 8080:80 djangodocker_server
 ```
   The command option `-it` allows to stop the container hitting CTRL+C, as it connects to it, instead of having to use `docker stop test`. See [Docker documentation](https://docs.docker.com/engine/reference/commandline/run/#examples) for more details.
 
