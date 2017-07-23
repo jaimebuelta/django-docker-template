@@ -1,11 +1,12 @@
 from django.http import JsonResponse
 from tweet.models import Tweet
 
-# Create your views here.
-
 
 def smoketests(request):
-    # Check status of each external service
+    '''
+    Check status of each external service.
+    Remember to keep everything lightweight and add short timeouts
+    '''
     result = {'status': 'ok'}
 
     # Check DB making a lightweight DB query

@@ -32,6 +32,7 @@ Tree structure
 └── src (the Django project files)
     ├── manage.py
     ├── pytest.ini
+    ├── smoketests
     └── ...
 ```
 
@@ -39,12 +40,19 @@ The code of the application is stored in `src`, and most of the docker-related f
 subdir. Two main ones are in the root directory, docker-compose.yaml and Dockerfile. These
 are the main docker files to operate at development.
 
+The application includes some smoketest that should be used to check if the service is healthy. At the
+moment it just includes a check for the db, as well as a general check that the application is
+responding, but more checks can be added under the smoketests view. The view is included as heathcheck
+in the docker server, but it can be pulled externally as well in loadbalancers, etc.
+
+
 Docker services for development
 =========
 
 The main docker-compose file has all the services to run at development
 
-- test: Run the using tests, using [pytest](https://docs.pytest.org) and [pytest-django](https://pytest-django.readthedocs.io/)
+- *test*: Run the using tests, using [pytest](https://docs.pytest.org) and 
+          [pytest-django](https://pytest-django.readthedocs.io/)
 
 ```
     docker-compose run test [pytest args]
@@ -64,12 +72,13 @@ learn a little bit about it. Some examples
 ``` 
 
 
-- debug-server: Run a debug server, aimed to check interactivly the app through a browser. It
-                    can be accessed at port 8000, and it will restart if the code of the application changes. It is using the django `runserver` command under the hood.
+- *dev-server*: Run a dev server, aimed to check interactivly the app through a browser. It
+                can be accessed at port 8000, and it will restart if the code of the application 
+                changes. It is using the django `runserver` command under the hood.
 ```
-docker-compose up [-d] debug-server
+docker-compose up [-d] dev-server
 ```
-- db: Database backend. It is started containing the data in the fixtures described in the code.
+- *db*: Database backend. It is started containing the data in the fixtures described in the code.
 
 
   Most of the changes in the code doesn't require restarting the services or rebuilding, but changes
@@ -84,10 +93,11 @@ Docker services oriented to production
 
 At the moment, the main docker-composer runs the main container with a developer configuration
 
-- server: Starts an http server serving the application. The application is served through
-          uwsgi and nginx, and static files are cached through nginx.
-          The service is available in http://localhost:8080/ when called through docker-compose.
-          Please note that the container opens port 80.
+- *server*: Starts an http server serving the application. The application is served through
+            uwsgi and nginx, and static files are cached through nginx.
+            The service is available in http://localhost:8080/ when called through docker-compose.
+            Please note that the container opens port 80.
+
   Once build, it can be used directly from the built container, though it need to connect to a valid db. A simple test can be done in
 
 ```
