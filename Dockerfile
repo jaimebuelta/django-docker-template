@@ -49,4 +49,4 @@ ADD ./src/ /opt/code/
 RUN python3 manage.py collectstatic
 
 EXPOSE 80
-ENTRYPOINT ["/bin/sh", "/opt/service/start_service.sh"]
+CMD ["/bin/sh", "/opt/service/start_service.sh"]
