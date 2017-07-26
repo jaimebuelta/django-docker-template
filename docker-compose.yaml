@@ -6,6 +6,13 @@ services:
         build:
             context: .
             dockerfile: ./docker/db/Dockerfile-postgres
+    build-deps:
+        build:
+            context: .
+            dockerfile: ./docker/deps/Dockerfile
+        volumes:
+            - ./vendor:/opt/ext_vendor
+        command: /opt/copy_deps.sh
     dev-server:
         build: .
         command: ./start_dev_server.sh
@@ -22,6 +29,8 @@ services:
             - ./src:/opt/code
         depends_on:
             - db
+            - build-deps
+
     # Producion related
     server:
         build: .

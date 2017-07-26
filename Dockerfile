@@ -2,7 +2,7 @@ FROM alpine:3.5
 
 # Add requirements for python and pip
 RUN apk add --update python3 pytest
-RUN apk add --update postgresql-dev 
+RUN apk add --update postgresql-libs
 RUN apk add --update curl
 
 RUN mkdir -p /opt/code
@@ -10,11 +10,17 @@ WORKDIR /opt/code
 
 ADD requirements.txt /opt/code
 
+# Try to use local wheels. Even if not present, it will proceed
+ADD ./vendor /opt/vendor
+ADD ./deps /opt/deps
+# Only install them if there's any
+RUN if ls /opt/vendor/*.whl 1> /dev/null 2>&1; then pip3 install /opt/vendor/*.whl; fi
+
 # Some Docker-fu. In one step install the compile packages, install the
 # dependencies and then remove them. That skims the image size quite
 # sensibly.
 RUN apk add --no-cache --virtual .build-deps \
-  python3-dev build-base linux-headers gcc \
+  python3-dev build-base linux-headers gcc postgresql-dev \
     # Installing python requirements
     && pip3 install -r requirements.txt \
     && find /usr/local \

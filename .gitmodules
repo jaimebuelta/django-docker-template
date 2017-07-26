@@ -1,0 +1,3 @@
+[submodule "deps/django-prometheus"]
+	path = deps/django-prometheus
+	url = https://github.com/korfuri/django-prometheus.git

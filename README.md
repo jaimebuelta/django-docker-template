@@ -26,6 +26,8 @@ Tree structure
 ├── docker-compose.yaml (general dockerfile description, aimed at development)
 ├── Dockerfile (General Dockerfile of the main server)
 ├── requirements.txt (python requirements)
+├── vendor (cache with generated wheels from dependencies)
+├── deps (git submodules with embedded dependencies)
 ├── docker (Files related to build and operation of containers)
 │   └── (docker subdirs, like db or server)
 │      └── Scripts related to docker creation and operation of that service
@@ -87,6 +89,13 @@ in the DB do, like new fixtures or a new migration. Build all services with
 ```
     docker-compose build
 ```
+
+- *build-deps*: Precompile all dependencies into wheels and copy them in ./vendor. This is not
+required, but can save time when rebuilding the containers often, to avoid compile the same code
+over and over. Check the more detailed documentation in the ./vendor/README.md file.
+  Note that dependencies embedded in ./deps won't be compiled (though their dependencies will be).
+Check more details in the ./deps/README.md file. 
+
 
 Docker services oriented to production
 =========
