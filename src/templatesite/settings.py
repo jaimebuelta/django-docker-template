@@ -11,10 +11,24 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import logging
+from logging.handlers import SysLogHandler
+
+SYSLOG_ADDRESS = (
+    os.environ.get('SYSLOG_HOST', 'localhost'),
+    int(os.environ.get('SYSLOG_PORT', 514)),
+)
+
+# Add a special logger to log related occurrences in settings
+settings_logger = logging.getLogger('settings')
+handler = SysLogHandler(address=SYSLOG_ADDRESS)
+formatter = logging.Formatter('SETTINGS %(levelname)-8s %(message)s')
+handler.setFormatter(formatter)
+settings_logger.addHandler(handler)
+settings_logger.setLevel(logging.INFO)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -24,10 +38,15 @@ SECRET_KEY = '$eb)1psv%h1r=(it)%ed95&8*xd%!d6tkpx!12-*hjt5+mug&o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG_MODE', False))
+if DEBUG:
+    settings_logger.critical('STARTING SERVER IN DEBUG MODE')
 
-ALLOWED_HOSTS = [
-    os.environ.get('ALLOWED_HOST'),
-]
+ALLOWED_HOSTS = []
+allowed_hosts = os.environ.get('ALLOWED_HOSTS', [])
+if allowed_hosts:
+    ALLOWED_HOSTS = allowed_hosts.split(',')
+settings_logger.info('ALLOWED_HOSTS: {}'.format(ALLOWED_HOSTS))
+
 
 # Application definition
 
@@ -147,10 +166,7 @@ LOGGING = {
         'syslog': {
             'level': 'INFO',
             'class': 'logging.handlers.SysLogHandler',
-            'address': (
-                os.environ.get('SYSLOG_HOST'),
-                int(os.environ.get('SYSLOG_PORT', 514)),
-            ),
+            'address': SYSLOG_ADDRESS,
             'filters': ['request_id'],
             'formatter': 'standard',
         },
@@ -159,12 +175,12 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'filters': ['request_id'],
             'formatter': 'standard',
-        }
+        },
     },
     'loggers': {
         # Top level for the application. Remember to set on
         # all loggers
-        'templatesite': {
+        '': {
             'handlers': ['syslog'],
             'level': 'DEBUG',
             'propagate': False,
@@ -185,6 +201,7 @@ LOGGING = {
 }
 
 LOG_REQUESTS = True
+# Origin request will ve X-REQUEST-ID
 LOG_REQUEST_ID_HEADER = "HTTP_X_REQUEST_ID"
 GENERATE_REQUEST_ID_IF_NOT_IN_HEADER = True
-REQUEST_ID_RESPONSE_HEADER = "RESPONSE_HEADER_NAME"
+REQUEST_ID_RESPONSE_HEADER = "X-REQUEST-ID"

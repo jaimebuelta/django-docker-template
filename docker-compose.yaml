@@ -47,6 +47,16 @@ services:
         depends_on:
             - db
             - build-deps
+    system-test:
+        env_file: environment.env
+        build:
+          context: .
+          dockerfile: ./docker/system-test/Dockerfile
+        entrypoint: pytest
+        volumes:
+          - ./system-test:/opt/system-test
+        depends_on:
+          - server
 
     # Producion related
     server:

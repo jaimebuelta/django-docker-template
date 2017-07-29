@@ -2,8 +2,7 @@ from django.http import JsonResponse
 from tweet.models import Tweet
 import logging
 
-# Set templatesite as top level to use the proper logger
-logger = logging.getLogger('templatesite.{}'.format(__name__))
+logger = logging.getLogger(__name__)
 
 
 def healthcheck(request):
