@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger('templatesite.{}'.format(__name__))
 
 
-def smoketests(request):
+def healthcheck(request):
     '''
     Check status of each external service.
     Remember to keep everything lightweight and add short timeouts

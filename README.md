@@ -35,7 +35,7 @@ Tree structure
 └── src (the Django project files)
     ├── manage.py
     ├── pytest.ini
-    ├── smoketests
+    ├── healthcheck
     └── ...
 ```
 
@@ -43,7 +43,7 @@ The code of the application is stored in `src`, and most of the docker-related f
 subdir. Two main ones are in the root directory, docker-compose.yaml and Dockerfile. These
 are the main docker files to operate at development.
 
-The application includes some smoketest that should be used to check if the service is healthy. At the
+The application includes some healtchecks that should be used to check if the service is healthy. At the
 moment it just includes a check for the db, as well as a general check that the application is
 responding, but more checks can be added under the smoketests view. The view is included as heathcheck
 in the docker server, but it can be pulled externally as well in loadbalancers, etc.

@@ -59,4 +59,4 @@ RUN python3 manage.py collectstatic
 
 EXPOSE 80
 CMD ["/bin/sh", "/opt/server/start_server.sh"]
-HEALTHCHECK CMD curl --fail http://localhost/smoketests/
+HEALTHCHECK CMD curl --fail http://localhost/healthcheck/
