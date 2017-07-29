@@ -13,13 +13,20 @@
 
 # Default server configuration
 #
+# Specifies the log format.
+log_format custom '${DOLLAR}remote_addr - ${DOLLAR}remote_user [${DOLLAR}time_local] "${DOLLAR}request" '
+        '${DOLLAR}status ${DOLLAR}body_bytes_sent "${DOLLAR}http_referer" '
+        '"${DOLLAR}http_user_agent" "${DOLLAR}http_x_forwarded_for"';
+
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
 
+
     # Direct the error log towards the centralised logging
-    error_log syslog:server=log:514 debug;
-    access_log syslog:server=log:514,tag=nginx,severity=info combined;
+    error_log syslog:server=${SYSLOG_HOST}:${SYSLOG_PORT} debug;
+    access_log syslog:server=${SYSLOG_HOST}:${SYSLOG_PORT},tag=nginx,severity=info custom;
+    rewrite_log on;
 
 	# SSL configuration
 	#
@@ -42,11 +49,11 @@ server {
 	# Add index.php to the list if you are using PHP
 	# index index.html index.htm index.nginx-debian.html;
 
-	server_name _;
+	# server_name _;
 
     location /static/ {
         autoindex on;
-        try_files $uri $uri/ =404;
+        try_files ${DOLLAR}uri ${DOLLAR}uri/ =404;
     }
 
 	location / {

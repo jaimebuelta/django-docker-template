@@ -4,6 +4,8 @@ FROM alpine:3.5
 RUN apk add --update python3 pytest
 RUN apk add --update postgresql-libs
 RUN apk add --update curl
+# Add envsubts
+RUN apk add --update gettext
 
 RUN mkdir -p /opt/code
 WORKDIR /opt/code
@@ -45,8 +47,8 @@ RUN mkdir -p /opt/server
 RUN mkdir -p /opt/static
 RUN apk add --update nginx
 RUN mkdir -p /run/nginx
-ADD ./docker/server/uwsgi.ini /opt/server
-ADD ./docker/server/nginx.conf /etc/nginx/conf.d/default.conf
+ADD ./docker/server/uwsgi.ini.template /opt/server
+ADD ./docker/server/nginx.conf.template /opt/server
 ADD ./docker/server/start_server.sh /opt/server
 
 # Add code

@@ -26,6 +26,7 @@ Tree structure
 ├── docker-compose.yaml (general dockerfile description, aimed at development)
 ├── Dockerfile (General Dockerfile of the main server)
 ├── requirements.txt (python requirements)
+├── environment.env (environment variables)
 ├── vendor (cache with generated wheels from dependencies)
 ├── deps (git submodules with embedded dependencies)
 ├── docker (Files related to build and operation of containers)
@@ -46,6 +47,12 @@ The application includes some smoketest that should be used to check if the serv
 moment it just includes a check for the db, as well as a general check that the application is
 responding, but more checks can be added under the smoketests view. The view is included as heathcheck
 in the docker server, but it can be pulled externally as well in loadbalancers, etc.
+
+environment.env stores environment variables that can set up the configuration. This include details
+for the DB connection (host, user, password, etc), but also for other services. For example,
+the environment variable SYSLOG_HOST points to the syslog facility to store logs. In this
+file, it points to the `log` service container, but on deployment it should point to
+the proper host.
 
 
 Docker services for development
@@ -128,5 +135,7 @@ At the moment, the main docker-composer runs the main container with a developer
 ```
   The command option `-it` allows to stop the container hitting CTRL+C, as it connects to it, instead of having to use `docker stop test`. See [Docker documentation](https://docs.docker.com/engine/reference/commandline/run/#examples) for more details.
 
-  The container will be configurable using environment variables.
+  The container will be configurable using environment variables. Check the available values in 
+the environment.env file. These variables will need to point to the proper deployment values. In the
+file they are defined for development purposes.
   Also note that any changes to the contaniner won't be in effect until is rebuild.

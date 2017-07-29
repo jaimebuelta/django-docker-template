@@ -3,14 +3,25 @@ version: '3'
 services:
     # Development related
     db:
+        env_file: environment.env
         build:
             context: .
             dockerfile: ./docker/db/Dockerfile-postgres
+            args:
+                # These values should be in sync with environment.env
+                # for development. If you change them, you'll 
+                # need to rebuild the container
+                - POSTGRES_DB=templatesitedb
+                - POSTGRES_USER=postgres
+                - POSTGRES_PASSWORD=somepassword
+                - POSTGRES_PORT=5432
     log:
+        env_file: environment.env
         build:
             context: .
             dockerfile: ./docker/log/Dockerfile
     build-deps:
+        env_file: environment.env
         build:
             context: .
             dockerfile: ./docker/deps/Dockerfile
@@ -18,6 +29,7 @@ services:
             - ./vendor:/opt/ext_vendor
         command: /opt/copy_deps.sh
     dev-server:
+        env_file: environment.env
         build: .
         command: ./start_dev_server.sh
         ports:
@@ -27,6 +39,7 @@ services:
         depends_on:
             - db
     test:
+        env_file: environment.env
         build: .
         entrypoint: pytest
         volumes:
@@ -37,6 +50,7 @@ services:
 
     # Producion related
     server:
+        env_file: environment.env
         build: .
         command: /opt/server/start_server.sh
         ports:

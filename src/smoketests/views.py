@@ -27,12 +27,15 @@ def smoketests(request):
         }
         logger.error(err_msg)
 
+    logger.debug('Healtchcheck result {}'.format(result))
+
     status_code = 200
     if result['status'] != 'ok':
         logger.error('Healthcheck result is bad')
         status_code = 500
+    else:
+        logger.info('Healtchcheck result is ok')
 
-    logger.info('Healtchcheck result is ok')
     response = JsonResponse(result)
     response.status_code = status_code
     return response

@@ -21,6 +21,7 @@ if [ -z "$(ls -A "$PGDATA")" ]; then
     echo
 
     if [ "$POSTGRES_DB" != 'postgres' ]; then
+      echo "Creating database $POSTGRES_DB"
       createSql="CREATE DATABASE $POSTGRES_DB;"
       echo $createSql | su-exec postgres postgres --single -jE
       echo

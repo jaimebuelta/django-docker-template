@@ -9,4 +9,4 @@ vacuum=True
 uid=1000
 processes=4
 max-requests=5000
-logger=rsyslog:${SYSLOG_HOST}:${SYSLOG_PORT},uwsgi
+logger=rsyslog:log:514,uwsgi

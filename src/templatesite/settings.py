@@ -78,12 +78,13 @@ WSGI_APPLICATION = 'templatesite.wsgi.application'
 
 DATABASES = {
     'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': 'postgres',
-                'USER': 'postgres',
-                'HOST': 'db',
-                'PORT': 5432,
-            },
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB', 'WRONG_DB'),
+        'USER': os.environ.get('POSTGRES_USER', 'WRONG_USER'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'WRONG_HOST'),
+        'PORT': int(os.environ.get('DATABASE_PORT', 5432)),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'WRONG_PASSWORD')
+     },
 }
 
 
@@ -145,7 +146,10 @@ LOGGING = {
         'syslog': {
             'level': 'INFO',
             'class': 'logging.handlers.SysLogHandler',
-            'address': ('log', 514),
+            'address': (
+                os.environ.get('SYSLOG_HOST'),
+                int(os.environ.get('SYSLOG_PORT', 514)),
+            ),
             'filters': ['request_id'],
             'formatter': 'standard',
         },
