@@ -22,6 +22,17 @@ def main(dir, name_to_search):
                 print(filename)
                 exit(0)
 
+            # Check if the name replaces underscores with dashes
+            # The wheel documentation is VERY confusing and inconsistent
+            # about this
+            if name.replace('_', '-') == name_to_search:
+                print(filename)
+                exit(0)
+
+            if name.replace('-', '_') == name_to_search:
+                print(filename)
+                exit(0)
+
     print('Package {} not found'.format(name_to_search))
     exit(1)
 

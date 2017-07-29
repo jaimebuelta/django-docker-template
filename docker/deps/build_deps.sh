@@ -14,6 +14,7 @@ for D in /opt/deps/*; do
     if [ -d "${D}" ]; then
         echo "Removing dependency in ${D}"   # your processing here
         PKG_NAME=`python3 ${D}/setup.py --name`
+        echo "Package name to remove ${PKG_NAME}"
         WHEEL=`python3 /opt/search_wheels.py $PKG_NAME -d /opt/vendor`
         echo "Deleting file $WHEEL"
         rm $WHEEL
