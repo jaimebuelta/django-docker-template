@@ -1,6 +1,5 @@
-from django.test import TestCase
+# Tests in pytest format, if you prefer
 
-class TemplateTest(TestCase):
 
-    def test_pass(self):
-        pass
+def test_pass():
+    pass

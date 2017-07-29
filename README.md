@@ -85,6 +85,9 @@ learn a little bit about it. Some examples
     docker-compose run test --lf
 ``` 
 
+  Some basic tests are added to the template. Note that the logs are directed to the console while running
+the tests, and will be captured by pytest.
+
 
 - *dev-server*: Run a dev server, aimed to check interactivly the app through a browser. It
                 can be accessed at port 8000, and it will restart if the code of the application 

@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 # Create your views here.
 class TweetSerializer(serializers.HyperlinkedModelSerializer):
-    href = serializers.HyperlinkedIdentityField(view_name='tweet')
+    href = serializers.HyperlinkedIdentityField(view_name='get_tweet')
 
     class Meta:
         model = Tweet

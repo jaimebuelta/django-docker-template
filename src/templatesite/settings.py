@@ -185,12 +185,6 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
-        # Top level handler for django
-        'django': {
-            'handlers': ['syslog'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
         # For usage on runserver (dev-server)
         'django.server': {
             'handlers': ['console'],
@@ -199,6 +193,11 @@ LOGGING = {
         },
     },
 }
+
+if os.environ.get('CONSOLE_LOGS'):
+    # Log all to the console as well. This is used while running unit tests
+    LOGGING['loggers']['']['handlers'] += ['console']
+
 
 LOG_REQUESTS = True
 # Origin request will ve X-REQUEST-ID

@@ -40,6 +40,8 @@ services:
             - db
     test:
         env_file: environment.env
+        environment:
+            - CONSOLE_LOGS=1
         build: .
         entrypoint: pytest
         volumes:
