@@ -57,11 +57,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_prometheus',
     'rest_framework',
     'tweet',
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'log_request_id.middleware.RequestIDMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -70,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'templatesite.urls'
@@ -96,16 +99,19 @@ WSGI_APPLICATION = 'templatesite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'WRONG_DB'),
-        'USER': os.environ.get('POSTGRES_USER', 'WRONG_USER'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'WRONG_HOST'),
-        'PORT': int(os.environ.get('DATABASE_PORT', 5432)),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'WRONG_PASSWORD')
-     },
-}
+if 'POSTGRES_HOST' not in os.environ:
+    settings_logger.warning('No DB configured. this may be initialisation')
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_DB', 'WRONG_DB'),
+            'USER': os.environ.get('POSTGRES_USER', 'WRONG_USER'),
+            'HOST': os.environ.get('POSTGRES_HOST'),
+            'PORT': int(os.environ.get('DATABASE_PORT', 5432)),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'WRONG_PASSWORD'),
+        },
+    }
 
 
 # Password validation
@@ -200,7 +206,12 @@ if os.environ.get('CONSOLE_LOGS'):
 
 
 LOG_REQUESTS = True
-# Origin request will ve X-REQUEST-ID
+# Origin request will ve X-REQUEST-ID
 LOG_REQUEST_ID_HEADER = "HTTP_X_REQUEST_ID"
 GENERATE_REQUEST_ID_IF_NOT_IN_HEADER = True
 REQUEST_ID_RESPONSE_HEADER = "X-REQUEST-ID"
+
+
+# Export Prometheus metrics
+PROMETHEUS_METRICS_EXPORT_ADDRESS = ''
+PROMETHEUS_METRICS_EXPORT_PORT = 9001

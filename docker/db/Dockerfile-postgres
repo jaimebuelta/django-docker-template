@@ -1,6 +1,7 @@
 # FROM rlesouef/alpine-postgres
 FROM alpine:3.5
 
+# Add the proper env variables for init the db
 ARG POSTGRES_DB
 ENV POSTGRES_DB $POSTGRES_DB
 ARG POSTGRES_USER
@@ -8,6 +9,9 @@ ENV POSTGRES_USER $POSTGRES_USER
 ARG POSTGRES_PASSWORD
 ENV POSTGRES_PASSWORD $POSTGRES_PASSWORD
 ARG POSTGRES_PORT
+
+# For usage in migrations, etc
+ENV POSTGRES_HOST localhost
 
 RUN apk --update add \
     bash nano curl su-exec\

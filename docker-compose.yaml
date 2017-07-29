@@ -20,6 +20,18 @@ services:
         build:
             context: .
             dockerfile: ./docker/log/Dockerfile
+    metrics:
+        build:
+          context: .
+          dockerfile: ./docker/metrics/Dockerfile
+        ports:
+            - "9090:9090"
+    metrics-graph:
+        image: grafana/grafana
+        ports:
+            - "3000:3000"
+        depends_on:
+            - metrics
     build-deps:
         env_file: environment.env
         build:
@@ -70,3 +82,4 @@ services:
         depends_on:
             - db
             - log
+            - metrics

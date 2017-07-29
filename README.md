@@ -129,6 +129,23 @@ around, but it needs to keep in mind. Generallt, you don not need to bring down 
 request id is added on each request helping group logs. This request id can be supplied externally
 using the header X-REQUEST-ID, and it will be returned with the response.
 
+- *metrics*: Report metrics in a [Prometheus](https://prometheus.io/) format. The Prometheus console 
+can be checked in the port 9090. The metrics are exported in the server in the url /metrics
+
+  A Django dashboard can be found at `http://localhost:9090/consoles/django.html`. This can be 
+tweaked in the file ./docker/metrics/consoles/django.html
+
+- *metrics-graph*: A Grafana container. This is presented directly as the Grafana container, and it 
+should be pointed towards the metrics container in http://metrics:9090/. Follow the instructions
+in the [Grafana docs](http://docs.grafana.org/installation/docker/)
+  Graphs and dashboards may be added, for example, querying:
+```
+    rate(django_http_requests_total_by_view_transport_method[1m])
+```
+To display all Django views. Be careful as the inherent non persistency of containers may destroy
+your dashboards. This should be used only as example. Getting good dashboards is important for 
+production, but not so much for development.
+
 
 Docker services oriented to production
 =========

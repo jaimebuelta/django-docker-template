@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^healthcheck/', include('healthcheck.urls')),
     url(r'^tweet/', include('tweet.urls')),
+    url('', include('django_prometheus.urls')),
 ]

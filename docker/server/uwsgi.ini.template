@@ -7,6 +7,6 @@ uid=nginx
 socket=/tmp/uwsgi.sock
 vacuum=True
 uid=1000
-processes=4
+processes=1
 max-requests=5000
 logger=rsyslog:log:514,uwsgi
