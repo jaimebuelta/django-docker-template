@@ -6,6 +6,10 @@ services:
         build:
             context: .
             dockerfile: ./docker/db/Dockerfile-postgres
+    log:
+        build:
+            context: .
+            dockerfile: ./docker/log/Dockerfile
     build-deps:
         build:
             context: .
@@ -39,3 +43,4 @@ services:
             - "8080:80"
         depends_on:
             - db
+            - log

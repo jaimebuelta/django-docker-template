@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'log_request_id.middleware.RequestIDMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -124,3 +125,61 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/opt/static/'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'request_id': {
+            '()': 'log_request_id.filters.RequestIDFilter'
+        }
+    },
+    'formatters': {
+        'standard': {
+            'format': 'templatesite: %(levelname)-8s [%(asctime)s] [%(request_id)s] %(name)s: %(message)s'
+        },
+    },
+    'handlers': {
+        # Only send to syslog info or higher
+        'syslog': {
+            'level': 'INFO',
+            'class': 'logging.handlers.SysLogHandler',
+            'address': ('log', 514),
+            'filters': ['request_id'],
+            'formatter': 'standard',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'filters': ['request_id'],
+            'formatter': 'standard',
+        }
+    },
+    'loggers': {
+        # Top level for the application. Remember to set on
+        # all loggers
+        'templatesite': {
+            'handlers': ['syslog'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        # Top level handler for django
+        'django': {
+            'handlers': ['syslog'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        # For usage on runserver (dev-server)
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
+LOG_REQUESTS = True
+LOG_REQUEST_ID_HEADER = "HTTP_X_REQUEST_ID"
+GENERATE_REQUEST_ID_IF_NOT_IN_HEADER = True
+REQUEST_ID_RESPONSE_HEADER = "RESPONSE_HEADER_NAME"

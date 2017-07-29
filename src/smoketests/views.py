@@ -1,5 +1,9 @@
 from django.http import JsonResponse
 from tweet.models import Tweet
+import logging
+
+# Set templatesite as top level to use the proper logger
+logger = logging.getLogger('templatesite.{}'.format(__name__))
 
 
 def smoketests(request):
@@ -8,6 +12,7 @@ def smoketests(request):
     Remember to keep everything lightweight and add short timeouts
     '''
     result = {'status': 'ok'}
+    logger.info('Performing healthcheck')
 
     # Check DB making a lightweight DB query
     try:
@@ -15,15 +20,19 @@ def smoketests(request):
         result['db'] = {'status': 'ok'}
     except Exception as err:
         result['status'] = 'nok'
+        err_msg = 'Error accessing DB: {}'.format(err)
         result['db'] = {
             'status': 'nok',
-            'err_msg': 'Error accessing DB: {}'.format(err),
+            'err_msg': err_msg,
         }
+        logger.error(err_msg)
 
     status_code = 200
     if result['status'] != 'ok':
+        logger.error('Healthcheck result is bad')
         status_code = 500
 
+    logger.info('Healtchcheck result is ok')
     response = JsonResponse(result)
     response.status_code = status_code
     return response
