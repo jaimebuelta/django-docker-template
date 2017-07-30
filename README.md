@@ -3,7 +3,7 @@ A Django project template for a RESTful Application using Docker
 
 This is a template for using Docker when building and operating a Django RESTful application
 
-Some opinionated ideas has been used. Please refer to this [blog post](https://wordpress.com/post/wrongsideofmemphis.wordpress.com/1804)
+Some opinionated ideas has been used. Please refer to this [blog post](https://wrongsideofmemphis.wordpress.com/2017/07/30/a-django-project-template-for-a-restful-application-using-docker/)
  for more info about the ideas and whys of this template, but in brief it aims to 
 prepare a project to be easy to develop and deploy to production using Docker containers.
 
