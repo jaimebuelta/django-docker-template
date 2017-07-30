@@ -135,9 +135,10 @@ can be checked in the port 9090. The metrics are exported in the server in the u
   A Django dashboard can be found at `http://localhost:9090/consoles/django.html`. This can be 
 tweaked in the file ./docker/metrics/consoles/django.html
 
-- *metrics-graph*: A Grafana container. This is presented directly as the Grafana container, and it 
-should be pointed towards the metrics container in http://metrics:9090/. Follow the instructions
-in the [Grafana docs](http://docs.grafana.org/installation/docker/)
+- *metrics-graph*: A Grafana container, as reference. This is presented directly from the Grafana 
+standard container, and it should be pointed towards the metrics container 
+in http://metrics:9090/. Follow the instructions in 
+the [Grafana docs](http://docs.grafana.org/installation/docker/)
   Graphs and dashboards may be added, for example, querying:
 ```
     rate(django_http_requests_total_by_view_transport_method[1m])

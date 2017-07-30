@@ -6,7 +6,7 @@ services:
         env_file: environment.env
         build:
             context: .
-            dockerfile: ./docker/db/Dockerfile-postgres
+            dockerfile: ./docker/db/Dockerfile
             args:
                 # These values should be in sync with environment.env
                 # for development. If you change them, you'll 
