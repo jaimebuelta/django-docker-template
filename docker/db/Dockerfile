@@ -10,6 +10,10 @@ ARG POSTGRES_PASSWORD
 ENV POSTGRES_PASSWORD $POSTGRES_PASSWORD
 ARG POSTGRES_PORT
 
+# secret key for Django
+ARG django_secret_key
+ENV DJANGO_SECRET_KEY $django_secret_key
+
 # For usage in migrations, etc
 ENV POSTGRES_HOST localhost
 

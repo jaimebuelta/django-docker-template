@@ -1,5 +1,8 @@
 FROM alpine:3.5
 
+ARG django_secret_key
+ENV DJANGO_SECRET_KEY $django_secret_key
+
 # Add requirements for python and pip
 RUN apk add --update python3 pytest
 RUN apk add --update postgresql-libs

@@ -34,7 +34,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$eb)1psv%h1r=(it)%ed95&8*xd%!d6tkpx!12-*hjt5+mug&o'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG_MODE', False))
@@ -206,12 +206,7 @@ if os.environ.get('CONSOLE_LOGS'):
 
 
 LOG_REQUESTS = True
-# Origin request will ve X-REQUEST-ID
+# Origin request will be X-REQUEST-ID
 LOG_REQUEST_ID_HEADER = "HTTP_X_REQUEST_ID"
 GENERATE_REQUEST_ID_IF_NOT_IN_HEADER = True
 REQUEST_ID_RESPONSE_HEADER = "X-REQUEST-ID"
-
-
-# Export Prometheus metrics
-PROMETHEUS_METRICS_EXPORT_ADDRESS = ''
-PROMETHEUS_METRICS_EXPORT_PORT = 9001

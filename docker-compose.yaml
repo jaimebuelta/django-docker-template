@@ -15,6 +15,8 @@ services:
                 - POSTGRES_USER=postgres
                 - POSTGRES_PASSWORD=somepassword
                 - POSTGRES_PORT=5432
+                # Remember to keep this consistent
+                - django_secret_key=secret_key!
     log:
         env_file: environment.env
         build:
@@ -42,7 +44,11 @@ services:
         command: /opt/copy_deps.sh
     dev-server:
         env_file: environment.env
-        build: .
+        build: 
+            context: .
+            args:
+                # Remember to keep this consistent
+                - django_secret_key=secret_key!
         command: ./start_dev_server.sh
         ports:
             - "8000:80"
@@ -55,7 +61,11 @@ services:
         env_file: environment.env
         environment:
             - CONSOLE_LOGS=1
-        build: .
+        build: 
+            context: .
+            args:
+                # Remember to keep this consistent
+                - django_secret_key=secret_key!
         entrypoint: pytest
         volumes:
             - ./src:/opt/code
@@ -77,7 +87,11 @@ services:
     server:
         image: templatesite
         env_file: environment.env
-        build: .
+        build: 
+            context: .
+            args:
+                # Remember to keep this consistent
+                - django_secret_key=secret_key!
         command: /opt/server/start_server.sh
         ports:
             - "8080:80"
