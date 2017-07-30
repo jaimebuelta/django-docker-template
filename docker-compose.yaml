@@ -50,6 +50,7 @@ services:
             - ./src:/opt/code
         depends_on:
             - db
+            - log
     test:
         env_file: environment.env
         environment:
