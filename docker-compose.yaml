@@ -74,6 +74,7 @@ services:
 
     # Producion related
     server:
+        image: templatesite
         env_file: environment.env
         build: .
         command: /opt/server/start_server.sh

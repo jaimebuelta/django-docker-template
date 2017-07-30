@@ -158,15 +158,17 @@ At the moment, the main docker-composer runs the main container with a developer
             The service is available in http://localhost:8080/ when called through docker-compose.
             Please note that the container opens port 80.
 
-  Once build, it can be used directly from the built container, though it need to connect to a valid db. A simple test can be done in
+  Once build, it can be used directly from the built container, though it need to connect to a valid db.
+And fill the environment variables adequately. A simple test can be done in
 
 ```
     # Start the container djangodocker_server routing its port 80 to locahost:8080
-    docker run -it --name test -p 8080:80 djangodocker_server
+    docker run -it --name test -p 8080:80 --env-file=your_environment.env templatesite
 ```
   The command option `-it` allows to stop the container hitting CTRL+C, as it connects to it, instead of having to use `docker stop test`. See [Docker documentation](https://docs.docker.com/engine/reference/commandline/run/#examples) for more details.
 
   The container will be configurable using environment variables. Check the available values in 
 the environment.env file. These variables will need to point to the proper deployment values. In the
-file they are defined for development purposes.
+file they are defined for development purposes, but they won't work for a test outside that, as they
+refer to docker-compose specific values.
   Also note that any changes to the contaniner won't be in effect until is rebuild.
