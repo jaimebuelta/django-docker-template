@@ -25,6 +25,11 @@ handler = SysLogHandler(address=SYSLOG_ADDRESS)
 formatter = logging.Formatter('SETTINGS %(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 settings_logger.addHandler(handler)
+# Log settings also in stdout
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+settings_logger.addHandler(handler)
+
 settings_logger.setLevel(logging.INFO)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

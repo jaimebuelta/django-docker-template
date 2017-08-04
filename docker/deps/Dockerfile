@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.6
 RUN mkdir -p /opt/vendor
 WORKDIR /opt/vendor
 RUN apk update

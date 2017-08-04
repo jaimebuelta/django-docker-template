@@ -44,6 +44,8 @@ services:
         command: /opt/copy_deps.sh
     dev-server:
         env_file: environment.env
+        environment:
+            - CONSOLE_LOGS=1
         build: 
             context: .
             args:

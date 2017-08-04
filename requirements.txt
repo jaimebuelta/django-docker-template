@@ -1,5 +1,5 @@
 uwsgi==2.0.15
-Django==1.11
+Django==1.11.4
 pytest-django==3.1.2
 psycopg2==2.7.3
 djangorestframework==3.6.3
