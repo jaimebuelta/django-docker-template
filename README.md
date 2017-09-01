@@ -8,6 +8,11 @@ Some opinionated ideas has been used. Please refer to this [blog post](https://w
 prepare a project to be easy to develop and deploy to production using Docker containers.
 
 
+Version
+======
+1.0 - 2017-08-14 Initial document
+
+
 Description
 =======
 
