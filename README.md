@@ -159,7 +159,7 @@ Docker services oriented to production
 At the moment, the main docker-composer runs the main container with a developer configuration
 
 - *server*: Starts an http server serving the application. The application is served through
-            uwsgi and nginx, and static files are cached through nginx.
+            uWSGI, and static files are cached through uWSGI.
             The service is available in http://localhost:8080/ when called through docker-compose.
             Please note that the container opens port 80.
 

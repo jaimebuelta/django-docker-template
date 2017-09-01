@@ -4,9 +4,7 @@ wsgi-file = templatesite/wsgi.py
 master=True
 pidfile=/tmp/uwsgi.pid
 
-# To serve under nginx
-# uid=nginx
-# socket=/tmp/uwsgi.sock
+stats=/tmp/uwsgi.stats.sock
 
 # Serve directly under uWSGI
 http=:80
