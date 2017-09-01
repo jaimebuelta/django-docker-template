@@ -12,4 +12,4 @@ scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: 'templatesite'
     static_configs:
-        - targets: ['server:80']
+        - targets: ['server:80', 'server:9091']

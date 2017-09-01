@@ -13,6 +13,9 @@ trap _term SIGTERM
 # Allow to define dollars in the templates
 export DOLLAR='$'
 envsubst < /opt/server/uwsgi.ini.template > /opt/server/uwsgi.ini
+if [ -f /opt/vendor/uwsgi_exporter ]; then
+   /opt/vendor/uwsgi_exporter -listen-address 0.0.0.0:9091 -uwsgi-stats-address unix:///tmp/uwsgi.stats.sock &
+fi
 uwsgi --ini /opt/server/uwsgi.ini &
 
 # We need to wait to properly catch the signal, that's why uWSGI is started

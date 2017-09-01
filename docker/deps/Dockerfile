@@ -7,8 +7,8 @@ RUN apk add python3
 RUN apk add py3-pip 
 
 # Required for compiling
-RUN apk add python3-dev build-base linux-headers gcc postgresql-dev
-RUN pip3 install cython wheel
+RUN apk add python3-dev build-base linux-headers gcc postgresql-dev go git
+RUN pip3 install cython wheel 
 
 ADD ./deps /opt/deps
 RUN mkdir -p /opt/vendor

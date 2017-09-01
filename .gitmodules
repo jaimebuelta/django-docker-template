@@ -1,3 +1,6 @@
 [submodule "deps/django-prometheus"]
 	path = deps/django-prometheus
 	url = https://github.com/korfuri/django-prometheus.git
+[submodule "deps/uwsgi_exporter"]
+	path = deps/uwsgi_exporter
+	url = https://github.com/micktwomey/uwsgi_exporter.git
