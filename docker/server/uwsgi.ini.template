@@ -3,12 +3,19 @@ chdir=/opt/code
 wsgi-file = templatesite/wsgi.py
 master=True
 pidfile=/tmp/uwsgi.pid
-uid=nginx
-socket=/tmp/uwsgi.sock
+
+# To serve under nginx
+# uid=nginx
+# socket=/tmp/uwsgi.sock
+
+# Serve directly under uWSGI
+http=:80
 vacuum=True
-uid=1000
 processes=1
 max-requests=5000
 logger=rsyslog:log:514,uwsgi
 # Used to send commands to uWSGI
 master-fifo=/tmp/uwsgi-fifo
+
+# Serving static files
+static-map = /static=/opt/static
