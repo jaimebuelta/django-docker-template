@@ -10,6 +10,7 @@ prepare a project to be easy to develop and deploy to production using Docker co
 
 Version
 ======
+1.1 - 2017-09-02 Simplify serving static files with uWSGI and remove nginx
 1.0 - 2017-08-14 Initial document
 
 
