@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.7
 
 # Add the proper env variables for init the db
 ARG POSTGRES_DB
