@@ -6,7 +6,7 @@ global:
       monitor: django-monitor
 
 rule_files:
-    - '/etc/prometheus/django.rules'
+    - '/etc/prometheus/django.rules.yml'
 
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.

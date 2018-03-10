@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.7
 
 RUN apk add --update python3 py3-pip pytest
 RUN mkdir -p /opt/system-test

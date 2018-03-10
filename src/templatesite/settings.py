@@ -19,12 +19,16 @@ SYSLOG_ADDRESS = (
     int(os.environ.get('SYSLOG_PORT', 514)),
 )
 
+
 # Add a special logger to log related occurrences in settings
-settings_logger = logging.getLogger('settings')
-handler = SysLogHandler(address=SYSLOG_ADDRESS)
 formatter = logging.Formatter('SETTINGS %(levelname)-8s %(message)s')
-handler.setFormatter(formatter)
-settings_logger.addHandler(handler)
+settings_logger = logging.getLogger('settings')
+
+if not os.environ.get('CONSOLE_LOGS'):
+    handler = SysLogHandler(address=SYSLOG_ADDRESS)
+    handler.setFormatter(formatter)
+    settings_logger.addHandler(handler)
+
 # Log settings also in stdout
 handler = logging.StreamHandler()
 handler.setFormatter(formatter)
@@ -207,7 +211,8 @@ LOGGING = {
 
 if os.environ.get('CONSOLE_LOGS'):
     # Log all to the console as well. This is used while running unit tests
-    LOGGING['loggers']['']['handlers'] += ['console']
+    del LOGGING['handlers']['syslog']
+    LOGGING['loggers']['']['handlers'] = ['console']
 
 
 LOG_REQUESTS = True
