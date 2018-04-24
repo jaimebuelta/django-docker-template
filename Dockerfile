@@ -9,9 +9,6 @@ RUN apk add --update postgresql-libs
 RUN apk add --update curl
 # Add envsubts
 RUN apk add --update gettext
-# Add nginx
-RUN apk add --update nginx
-RUN mkdir -p /run/nginx
 
 RUN mkdir -p /opt/code
 WORKDIR /opt/code
@@ -24,7 +21,7 @@ ADD ./deps /opt/deps
 # Only install them if there's any
 RUN if ls /opt/vendor/*.whl 1> /dev/null 2>&1; then pip3 install /opt/vendor/*.whl; fi
 
-# Add uwsgi and nginx configuration
+# Add webserver configuretion and static files configuration
 RUN mkdir -p /opt/server
 RUN mkdir -p /opt/static
 
@@ -59,7 +56,6 @@ RUN apk add --no-cache --virtual .build-deps \
 
 
 ADD ./docker/server/uwsgi.ini.template /opt/server
-ADD ./docker/server/nginx.conf.template /opt/server
 ADD ./docker/server/start_server.sh /opt/server
 
 # Add code
